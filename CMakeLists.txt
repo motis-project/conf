@@ -33,3 +33,7 @@ else()
   set_target_properties(conf PROPERTIES COMPILE_FLAGS "-Wall -Wextra -std=c++11")
   target_link_libraries(conf ${Boost_LIBRARIES})
 endif()
+
+add_executable(conf-example EXCLUDE_FROM_ALL example/main.cc)
+target_link_libraries(conf-example conf)
+set_target_properties(conf-example PROPERTIES COMPILE_FLAGS "-std=c++11")
