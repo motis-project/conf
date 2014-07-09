@@ -16,7 +16,7 @@ public:
                                   listener_settings const& options);
 
   listener_settings(std::string default_host,
-                                       std::string default_port)
+                    std::string default_port)
       : host(default_host),
         port(default_port) {
   }
