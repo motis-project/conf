@@ -112,6 +112,8 @@ void options_parser::print_options(std::ostream& out) const {
       } else {
         out << ";";
       }
+    } else {
+      out << ";";
     }
 
     out << "\n";
