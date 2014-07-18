@@ -97,7 +97,24 @@ void options_parser::print_unrecognized(std::ostream& out) {
 void options_parser::print_options(std::ostream& out) const {
   std::vector<std::string> options;
   for (auto const& opt : desc_.options()) {
-    out << opt->long_name() << "\n";
+    out << opt->long_name() << ";" << opt->description();
+
+    boost::any default_val;
+    if (opt->semantic()->apply_default(default_val)) {
+      if(typeid(std::string) == default_val.type()) {
+        out << ";" << boost::any_cast<std::string>(default_val);
+      } else if(typeid(bool) == default_val.type()) {
+        out << ";" << boost::any_cast<bool>(default_val);
+      } else if (typeid(int) == default_val.type()) {
+        out << ";" << boost::any_cast<int>(default_val);
+      } else if (typeid(unsigned) == default_val.type()) {
+        out << ";" << boost::any_cast<unsigned>(default_val);
+      } else {
+        out << ";";
+      }
+    }
+
+    out << "\n";
   }
 }
 
