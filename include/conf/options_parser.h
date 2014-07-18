@@ -23,6 +23,8 @@ public:
   bool version();
   void print_used(std::ostream& out);
   void print_unrecognized(std::ostream& out);
+  bool list_options() const;
+  void print_options(std::ostream& out) const;
 
 private:
   std::string file_;

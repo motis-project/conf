@@ -16,6 +16,7 @@ options_parser::options_parser(std::vector<configuration*> options)
 void options_parser::configure_description() {
   desc_.add_options()
       ("help", "produce help message")
+      ("options", "print options")
       ("version", "print version")
       ("config,c",
           po::value<std::string>(&file_)->default_value("config.ini"),
@@ -66,6 +67,10 @@ bool options_parser::version() {
   return vm_.count("version");
 }
 
+bool options_parser::list_options() const {
+  return vm_.count("options");
+}
+
 void options_parser::print_used(std::ostream& out) {
   out << "Used Options: " << "\n\n";
   for (auto const* option : options_) {
@@ -87,6 +92,13 @@ void options_parser::print_unrecognized(std::ostream& out) {
     out << "  " << unrecog_option << "\n";
   }
   out << "\n";
+}
+
+void options_parser::print_options(std::ostream& out) const {
+  std::vector<std::string> options;
+  for (auto const& opt : desc_.options()) {
+    out << opt->long_name() << "\n";
+  }
 }
 
 }  // namespace conf
