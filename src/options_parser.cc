@@ -60,15 +60,15 @@ void options_parser::read_configuration_file() {
 }
 
 bool options_parser::help() {
-  return vm_.count("help");
+  return vm_.count("help") >= 1;
 }
 
 bool options_parser::version() {
-  return vm_.count("version");
+  return vm_.count("version") >= 1;
 }
 
 bool options_parser::list_options() const {
-  return vm_.count("options");
+  return vm_.count("options") >= 1;
 }
 
 void options_parser::print_used(std::ostream& out) {
