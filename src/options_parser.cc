@@ -28,12 +28,8 @@ void options_parser::configure_description() {
 }
 
 void options_parser::read_command_line_args(int argc, char* argv[]) {
-  po::positional_options_description p;
-  p.add("config", -1);
-
   auto parsed = po::command_line_parser(argc, argv)
                   .options(desc_)
-                  .positional(p)
                   .allow_unregistered()
                   .run();
   po::store(parsed, vm_);
