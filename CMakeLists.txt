@@ -23,7 +23,7 @@ if(MSVC)
   set_target_properties(conf PROPERTIES COMPILE_DEFINITIONS "${_def}")
 elseif(MINGW)
   target_link_libraries(conf -Wl,-Bstatic ${Boost_LIBRARIES})
-  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-std=c++11 -fPIC")
+  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-std=c++11")
   set(_def
     BOOST_THREAD_USE_LIB
     WINVER=0x0501
