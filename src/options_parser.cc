@@ -8,19 +8,20 @@ namespace po = boost::program_options;
 namespace conf {
 
 options_parser::options_parser(std::vector<configuration*> options)
-  : desc_("General"),
-    options_(std::move(options)) {
+    : desc_("General"), options_(std::move(options)) {
   configure_description();
 }
 
 void options_parser::configure_description() {
+  // clang-format off
   desc_.add_options()
-      ("help", "produce help message")
-      ("options", "print options")
-      ("version", "print version")
-      ("config,c",
-          po::value<std::string>(&file_)->default_value("config.ini"),
-          "config path");
+    ("help", "produce help message")
+    ("options", "print options")
+    ("version", "print version")
+    ("config,c",
+        po::value<std::string>(&file_)->default_value("config.ini"),
+        "config path");
+  // clang-format on
 
   for (auto& option : options_) {
     desc_.add(option->desc());
@@ -29,14 +30,14 @@ void options_parser::configure_description() {
 
 void options_parser::read_command_line_args(int argc, char* argv[]) {
   auto parsed = po::command_line_parser(argc, argv)
-                  .options(desc_)
-                  .allow_unregistered()
-                  .run();
+                    .options(desc_)
+                    .allow_unregistered()
+                    .run();
   po::store(parsed, vm_);
   po::notify(vm_);
 
-  auto unrecog_cmdl = po::collect_unrecognized(parsed.options,
-                                               po::include_positional);
+  auto unrecog_cmdl =
+      po::collect_unrecognized(parsed.options, po::include_positional);
   unrecog_.insert(unrecog_.end(), unrecog_cmdl.begin(), unrecog_cmdl.end());
 }
 
@@ -55,28 +56,22 @@ void options_parser::read_configuration_file() {
   }
 }
 
-bool options_parser::help() {
-  return vm_.count("help") >= 1;
-}
+bool options_parser::help() { return vm_.count("help") >= 1; }
 
-bool options_parser::version() {
-  return vm_.count("version") >= 1;
-}
+bool options_parser::version() { return vm_.count("version") >= 1; }
 
-bool options_parser::list_options() const {
-  return vm_.count("options") >= 1;
-}
+bool options_parser::list_options() const { return vm_.count("options") >= 1; }
 
 void options_parser::print_used(std::ostream& out) {
-  out << "Used Options: " << "\n\n";
-  for (auto const* option : options_) {
-    out << *option << "\n\n";
+  out << "Used Options:\n\n";
+  for (auto const& option : options_) {
+    if (!option->empty_config()) {
+      out << *option << "\n\n";
+    }
   }
 }
 
-void options_parser::print_help(std::ostream& out) {
-  out << desc_ << "\n";
-}
+void options_parser::print_help(std::ostream& out) { out << desc_ << "\n"; }
 
 void options_parser::print_unrecognized(std::ostream& out) {
   if (unrecog_.empty()) {
@@ -97,9 +92,9 @@ void options_parser::print_options(std::ostream& out) const {
 
     boost::any default_val;
     if (opt->semantic()->apply_default(default_val)) {
-      if(typeid(std::string) == default_val.type()) {
+      if (typeid(std::string) == default_val.type()) {
         out << ";" << boost::any_cast<std::string>(default_val);
-      } else if(typeid(bool) == default_val.type()) {
+      } else if (typeid(bool) == default_val.type()) {
         out << ";" << boost::any_cast<bool>(default_val);
       } else if (typeid(int) == default_val.type()) {
         out << ";" << boost::any_cast<int>(default_val);
