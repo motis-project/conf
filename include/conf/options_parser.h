@@ -1,5 +1,4 @@
-#ifndef CONF_OPTIONS_PARSER_H_
-#define CONF_OPTIONS_PARSER_H_
+#pragma once
 
 #include <vector>
 #include <ostream>
@@ -38,5 +37,3 @@ private:
 };
 
 }  // namespace conf
-
-#endif  // CONF_OPTIONS_PARSER_H_
