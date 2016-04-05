@@ -3,6 +3,7 @@
 #include "conf/configuration.h"
 #include "conf/options_parser.h"
 #include "conf/simple_config.h"
+#include "conf/simple_config_param.h"
 
 #include "boost/program_options.hpp"
 
@@ -43,20 +44,74 @@ std::ostream& operator<<(std::ostream& out, const listener_settings& options) {
   return out;
 }
 
+enum class isolation_level_t {
+  SERIALIZABLE,
+  REPEATED_READS,
+  READ_COMITTED,
+  READ_UNCOMITTED
+};
+
+constexpr auto kIsolationLevelSerializable = "serialiable";
+constexpr auto kIsolationLevelRepeatedReads = "repeated_reads";
+constexpr auto kIsolationLevelReadComitted = "read_comitted";
+constexpr auto kIsolationLevelReadUncomitted = "read_uncomitted";
+
+std::istream& operator>>(std::istream& in, isolation_level_t& lvl) {
+  std::string token;
+  in >> token;
+
+  if (token == kIsolationLevelSerializable) {
+    lvl = isolation_level_t::SERIALIZABLE;
+  } else if (token == kIsolationLevelRepeatedReads) {
+    lvl = isolation_level_t::REPEATED_READS;
+  } else if (token == kIsolationLevelReadComitted) {
+    lvl = isolation_level_t::READ_COMITTED;
+  } else if (token == kIsolationLevelReadUncomitted) {
+    lvl = isolation_level_t::READ_UNCOMITTED;
+  } else {
+    throw std::runtime_error("unknown serialization level.");
+  }
+  return in;
+}
+
+std::ostream& operator<<(std::ostream& out, isolation_level_t const& lvl) {
+  switch (lvl) {
+    case isolation_level_t::SERIALIZABLE:
+      out << kIsolationLevelSerializable;
+      break;
+    case isolation_level_t::REPEATED_READS:
+      out << kIsolationLevelRepeatedReads;
+      break;
+    case isolation_level_t::READ_COMITTED:
+      out << kIsolationLevelReadComitted;
+      break;
+    case isolation_level_t::READ_UNCOMITTED:
+      out << kIsolationLevelReadUncomitted;
+      break;
+    default: out << "unknown"; break;
+  }
+  return out;
+}
+
 class database_settings : public conf::simple_config {
 public:
   database_settings(std::string const& url = "localhost:5432", int timeout = 30,
-                    bool retry = false, std::vector<std::string> flags = {})
+                    bool retry = false, isolation_level_t isolation_lvl =
+                                            isolation_level_t::SERIALIZABLE,
+                    std::vector<std::string> flags = {})
       : simple_config("Database Options", "db") {
-    string_var(url_, url, "url", "the Database URL");
-    int_var(timeout_, timeout, "timeout", "timeout for a connection (seconds)");
-    bool_var(retry_, retry, "retry", "retry on connection loss");
-    multitoken_var(flags_, flags, "flags", "forwarded flags");
+    string_param(url_, url, "url", "the Database URL");
+    int_param(timeout_, timeout, "timeout", "connection timeout (in seconds)");
+    bool_param(retry_, retry, "retry", "retry on connection loss");
+    add_param(conf::make_param(isolation_lvl_, isolation_lvl, "isolation_lvl",
+                               "default isolation level for transactions"));
+    multitoken_param(flags_, flags, "flags", "forwarded flags");
   }
 
   std::string url_;
   int timeout_;
   bool retry_;
+  isolation_level_t isolation_lvl_;
   std::vector<std::string> flags_;
 };
 

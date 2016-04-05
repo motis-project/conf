@@ -14,6 +14,7 @@ class options_description;
 }
 
 namespace conf {
+class abstract_param;
 
 class simple_config : public conf::configuration {
 public:
@@ -28,35 +29,32 @@ public:
   virtual boost::program_options::options_description desc() override;
   virtual void print(std::ostream& out) const override;
 
-  void int_var(int& mem, std::string const& name, std::string const& desc);
-  void int_var(int& mem, int const& default_value, std::string const& name,
-               std::string const& desc);
+  void int_param(int& mem, std::string const& name, std::string const& desc);
+  void int_param(int& mem, int const& default_value, std::string const& name,
+                 std::string const& desc);
 
-  void string_var(std::string& mem, std::string const& name,
+  void string_param(std::string& mem, std::string const& name,
+                    std::string const& desc);
+  void string_param(std::string& mem, std::string const& default_value,
+                    std::string const& name, std::string const& desc);
+
+  void bool_param(bool& mem, std::string const& name, std::string const& desc);
+  void bool_param(bool& mem, bool const& default_value, std::string const& name,
                   std::string const& desc);
-  void string_var(std::string& mem, std::string const& default_value,
-                  std::string const& name, std::string const& desc);
 
-  void bool_var(bool& mem, std::string const& name, std::string const& desc);
-  void bool_var(bool& mem, bool const& default_value, std::string const& name,
-                std::string const& desc);
+  void multitoken_param(std::vector<std::string>& mem, std::string const& name,
+                        std::string const& desc);
+  void multitoken_param(std::vector<std::string>& mem,
+                        std::vector<std::string> const& default_value,
+                        std::string const& name, std::string const& desc);
 
-  void multitoken_var(std::vector<std::string>& mem, std::string const& name,
-                      std::string const& desc);
-  void multitoken_var(std::vector<std::string>& mem,
-                      std::vector<std::string> const& default_value,
-                      std::string const& name, std::string const& desc);
-
-  // std::vector<std::string>& multitoken_var(std::string const& name);
+  void add_param(std::unique_ptr<abstract_param> param);
 
 private:
-  std::string prefixed(std::string const& name) const;
-
   std::string name_;
   std::string prefix_;
 
-  struct impl;
-  std::unique_ptr<impl> impl_;
+  std::vector<std::unique_ptr<abstract_param>> params_;
 };
 
 }  // namespace conf
