@@ -16,6 +16,11 @@ class options_description;
 namespace conf {
 class abstract_param;
 
+template <typename T>
+std::unique_ptr<abstract_param> make_param(T& mem, T const& default_value,
+                                           std::string const& name,
+                                           std::string const& desc);
+
 class simple_config : public conf::configuration {
 public:
   simple_config(std::string const name, std::string const prefix = "");
@@ -49,6 +54,13 @@ public:
                         std::string const& name, std::string const& desc);
 
   void add_param(std::unique_ptr<abstract_param> param);
+
+  // requires #include "conf/simple_config_param.h"
+  template <typename T>
+  void template_param(T& mem, T const& default_value, std::string const& name,
+                 std::string const& desc) {
+    add_param(make_param(mem, default_value, name, desc));
+  }
 
 private:
   std::string name_;

@@ -103,8 +103,8 @@ public:
     string_param(url_, url, "url", "the Database URL");
     int_param(timeout_, timeout, "timeout", "connection timeout (in seconds)");
     bool_param(retry_, retry, "retry", "retry on connection loss");
-    add_param(conf::make_param(isolation_lvl_, isolation_lvl, "isolation_lvl",
-                               "default isolation level for transactions"));
+    template_param(isolation_lvl_, isolation_lvl, "isolation_lvl",
+                   "default isolation level for transactions");
     multitoken_param(flags_, flags, "flags", "forwarded flags");
   }
 

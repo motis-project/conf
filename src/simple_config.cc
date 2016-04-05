@@ -76,7 +76,7 @@ void simple_config::int_param(int& mem, std::string const& name,
 void simple_config::int_param(int& mem, int const& default_value,
                               std::string const& name,
                               std::string const& desc) {
-  add_param(make_param(mem, default_value, name, desc));
+  template_param(mem, default_value, name, desc);
 }
 
 void simple_config::string_param(std::string& mem, std::string const& name,
@@ -88,7 +88,7 @@ void simple_config::string_param(std::string& mem,
                                  std::string const& default_value,
                                  std::string const& name,
                                  std::string const& desc) {
-  add_param(make_param(mem, default_value, name, desc));
+  template_param(mem, default_value, name, desc);
 }
 
 void simple_config::bool_param(bool& mem, std::string const& name,
