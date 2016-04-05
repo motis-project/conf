@@ -47,6 +47,7 @@ public:
 
   std::vector<std::string>& val_;
 };
+
 }  // namespace detail
 
 simple_config::simple_config(std::string const name, std::string const prefix)
