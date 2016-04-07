@@ -1,5 +1,4 @@
-#ifndef CONF_CONFIGURATION_H_
-#define CONF_CONFIGURATION_H_
+#pragma once
 
 #include <ostream>
 
@@ -27,5 +26,3 @@ public:
 };
 
 }  // namespace conf
-
-#endif  // CONF_CONFIGURATION_H_
