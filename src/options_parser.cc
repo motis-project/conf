@@ -7,7 +7,7 @@ namespace po = boost::program_options;
 
 namespace conf {
 
-template<typename Parser>
+template <typename Parser>
 void generic_read_command_line_args(Parser& parser,
                                     po::options_description& desc,
                                     po::variables_map& vm,
@@ -26,7 +26,10 @@ void generic_read_command_line_args(Parser& parser,
 }
 
 options_parser::options_parser(std::vector<configuration*> options)
-    : desc_("General"), options_(std::move(options)) {
+    : desc_("General") {
+  std::copy_if(std::begin(options), std::end(options),
+               std::back_inserter(options_),
+               [](configuration* c) { return !c->empty_config(); });
   configure_description();
 }
 
@@ -52,13 +55,11 @@ void options_parser::read_command_line_args(int argc, char* argv[],
   generic_read_command_line_args(p, desc_, vm_, unrecog_, allow_unreg);
 }
 
-
 void options_parser::read_command_line_args(
     std::vector<std::string> const& args, bool allow_unreg) {
   auto p = po::command_line_parser(args);
   generic_read_command_line_args(p, desc_, vm_, unrecog_, allow_unreg);
 }
-
 
 void options_parser::read_configuration_file(bool allow_unreg) {
   std::ifstream ifs(file_.c_str());
