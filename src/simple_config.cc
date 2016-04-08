@@ -50,8 +50,9 @@ public:
 
 }  // namespace detail
 
-simple_config::simple_config(std::string const name, std::string const prefix)
+simple_config::simple_config(std::string name, std::string prefix)
     : name_(std::move(name)), prefix_(std::move(prefix)) {}
+
 simple_config::~simple_config() = default;
 
 po::options_description simple_config::desc() {
