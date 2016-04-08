@@ -44,7 +44,7 @@ public:
             desc_.c_str());
   }
 
-  virtual void print(std::ostream& os) const { os << val_; }
+  virtual void print(std::ostream& os) const override { os << val_; }
 
   T& val_;
 };

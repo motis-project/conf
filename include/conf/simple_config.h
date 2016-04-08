@@ -58,7 +58,7 @@ public:
   // requires #include "conf/simple_config_param.h"
   template <typename T>
   void template_param(T& mem, T const& default_value, std::string const& name,
-                 std::string const& desc) {
+                      std::string const& desc) {
     add_param(make_param(mem, default_value, name, desc));
   }
 
