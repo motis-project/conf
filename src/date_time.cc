@@ -48,7 +48,7 @@ time_duration parse_offset(std::string const& offset_str) {
     return it->second;
   }
 
-  static std::regex regex{"^((?:\\+|-)[0-9]{2}):?([0-9]{2})?$"};
+  static const std::regex regex{"^((?:\\+|-)[0-9]{2}):?([0-9]{2})?$"};
 
   std::smatch m;
   std::regex_search(offset_str, m, regex);
@@ -76,7 +76,7 @@ std::time_t parse_date_time(std::string const& str) {
       "([0-9]{4}-[0-9]{2}-[0-9]{2})"  // group 1: date
       "(T[0-9]{2}:[0-9]{2}(?::[0-9]{2})?)?"  // group 2: time
       "(.+)?";  // group 3: offset
-  static std::regex regex{re};
+  static const std::regex regex{re};
 
   std::smatch m;
   std::regex_search(str, m, regex);

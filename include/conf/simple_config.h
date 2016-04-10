@@ -28,11 +28,10 @@ public:
 
   simple_config(simple_config const&) = delete;
   simple_config& operator=(simple_config const&) = delete;
-  simple_config(simple_config&&) = delete;
-  simple_config& operator=(simple_config&&) = delete;
 
   virtual boost::program_options::options_description desc() override;
   virtual void print(std::ostream& out) const override;
+  virtual bool empty_config() const override;
 
   void int_param(int& mem, std::string const& name, std::string const& desc);
   void int_param(int& mem, int const& default_value, std::string const& name,

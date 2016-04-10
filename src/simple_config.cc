@@ -70,6 +70,8 @@ void simple_config::print(std::ostream& out) const {
   }
 }
 
+bool simple_config::empty_config() const { return params_.size() == 0; }
+
 void simple_config::int_param(int& mem, std::string const& name,
                               std::string const& desc) {
   int_param(mem, 0, name, desc);
