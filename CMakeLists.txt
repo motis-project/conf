@@ -39,3 +39,8 @@ endif()
 add_executable(conf-example EXCLUDE_FROM_ALL example/main.cc)
 target_link_libraries(conf-example conf)
 set_target_properties(conf-example PROPERTIES COMPILE_FLAGS "-std=c++11")
+
+file(GLOB_RECURSE conf-test-files test/*.cc)
+add_executable(conf-test EXCLUDE_FROM_ALL ${conf-test-files})
+set_target_properties(conf-test PROPERTIES COMPILE_FLAGS "-Wall -Wextra -std=c++11")
+target_link_libraries(conf-test conf)
