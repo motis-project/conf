@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "conf/configuration.h"
+#include "conf/date_time.h"
 #include "conf/options_parser.h"
 #include "conf/simple_config.h"
 #include "conf/simple_config_param.h"
@@ -115,10 +116,22 @@ public:
   std::vector<std::string> flags_;
 };
 
+class doomsday_settings : public conf::simple_config {
+public:
+  doomsday_settings(
+      std::time_t const apocalypse = conf::parse_date_time("2012-12-21"))
+      : simple_config("Doomsday Options", "doom") {
+    template_param(apocalypse_, {apocalypse}, "apocalypse", "THE END IS NEAR!");
+  }
+
+  conf::holder<std::time_t> apocalypse_;
+};
+
 int main(int argc, char* argv[]) {
   listener_settings listener_opt("0.0.0.0", "8080");
   database_settings database_opt("db1.example.com");
-  conf::options_parser parser({&listener_opt, &database_opt});
+  doomsday_settings doomsday_opt;
+  conf::options_parser parser({&listener_opt, &database_opt, &doomsday_opt});
   parser.read_command_line_args(argc, argv);
 
   if (parser.help()) {
@@ -138,4 +151,6 @@ int main(int argc, char* argv[]) {
 
   std::cout << "Connecting to Database on " << database_opt.url_ << " (timeout "
             << database_opt.timeout_ << "s)\n";
+
+  std::cout << "Apocalypse scheduled for: " << doomsday_opt.apocalypse_ << "\n";
 }
