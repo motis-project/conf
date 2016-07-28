@@ -6,10 +6,16 @@ project(conf)
 #   link_directories(${CMAKE_LIBRARY_PATH})
 # endif()
 
+if (MSVC)
+  set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_MULTITHREADED ON)
+  set(Boost_USE_STATIC_RUNTIME ON)
+endif()
+
 find_package(Boost COMPONENTS system program_options)
 link_directories(${Boost_LIBRARY_DIRS})
 
-include_directories(${Boost_INCLUDE_DIR})
+include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 include_directories("./include")
 
 file(GLOB_RECURSE CONF_SOURCES "src/*.cc")
