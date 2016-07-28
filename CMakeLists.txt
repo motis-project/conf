@@ -12,7 +12,7 @@ if (MSVC)
   set(Boost_USE_STATIC_RUNTIME ON)
 endif()
 
-find_package(Boost COMPONENTS system program_options)
+find_package(Boost COMPONENTS system program_options REQUIRED)
 link_directories(${Boost_LIBRARY_DIRS})
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIR})
