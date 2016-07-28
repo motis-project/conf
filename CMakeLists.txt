@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 2.6)
 project(conf)
 
-if (MSVC)
-  set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${BOOST_ROOT}\\stage\\lib")
-  link_directories(${CMAKE_LIBRARY_PATH})
-endif()
+# if (MSVC)
+#   set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${BOOST_ROOT}\\stage\\lib")
+#   link_directories(${CMAKE_LIBRARY_PATH})
+# endif()
 
 find_package(Boost COMPONENTS system program_options)
+link_directories(${Boost_LIBRARY_DIRS})
 
 include_directories(${Boost_INCLUDE_DIR})
 include_directories("./include")
