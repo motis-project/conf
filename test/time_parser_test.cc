@@ -13,6 +13,12 @@ CATCH_TEST_CASE("conf", "date") {
     CATCH_CHECK(parse_date_time("") == 0);
   };
 
+  CATCH_SECTION("now") {
+    auto const now = time(nullptr);
+    CATCH_CHECK(parse_date_time("NOW") > now - 60);
+    CATCH_CHECK(parse_date_time("NOW") < now + 60);
+  };
+
   CATCH_SECTION("unix timestamps") {
     CATCH_CHECK(parse_date_time("1459964657") == 1459964657);
     CATCH_CHECK(parse_date_time("1459977338") == 1459977338);

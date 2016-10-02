@@ -1,5 +1,6 @@
 #include "conf/date_time.h"
 
+#include <ctime>
 #include <regex>
 #include <string>
 
@@ -68,6 +69,10 @@ std::time_t parse_date_time(std::string const& str) {
     return 0;
   }
 
+  if (str == "NOW") {
+    return std::time(nullptr);
+  }
+
   if (boost::all(str, boost::is_digit())) {
     return std::stol(str);
   }
@@ -93,7 +98,6 @@ std::istream& operator>>(std::istream& in, holder<std::time_t>& result) {
   std::string token;
   in >> token;
   result = parse_date_time(token);
-
   return in;
 }
 
