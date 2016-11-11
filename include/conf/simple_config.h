@@ -1,8 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <ostream>
 #include <string>
-#include <memory>
 #include <vector>
 
 #include "conf/configuration.h"
@@ -61,7 +61,7 @@ public:
     add_param(make_param(mem, default_value, name, desc));
   }
 
-private:
+protected:
   std::string name_;
   std::string prefix_;
 

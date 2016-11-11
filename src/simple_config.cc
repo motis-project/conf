@@ -14,8 +14,7 @@ namespace detail {
 class bool_param final : public template_param<bool> {
 public:
   template <typename... Args>
-  bool_param(Args&&... args)
-      : template_param(std::forward<Args>(args)...) {}
+  bool_param(Args&&... args) : template_param(std::forward<Args>(args)...) {}
   void print(std::ostream& o) const override { o << (val_ ? "true" : "false"); }
 };
 
