@@ -110,7 +110,7 @@ std::istream& operator>>(std::istream& in, holder<std::time_t>& result) {
 std::ostream& operator<<(std::ostream& out, holder<std::time_t> const& t) {
   auto time = static_cast<std::time_t>(t);
   char buf[sizeof "2011-10-08t07:07:09z-0430"];
-  struct tm result;
+  struct tm result{};
   gmt(&time, &result);
   strftime(buf, sizeof buf, "%FT%TZ%z", &result);
   return out << buf;
