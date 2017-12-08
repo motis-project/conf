@@ -9,6 +9,12 @@
 
 #include "conf/holder.h"
 
+#ifdef _MSC_VER
+#define gmt(a, b) gmtime_s(b, a)
+#else
+#define gmt(a, b) gmtime_r(a, b)
+#endif
+
 using namespace boost::posix_time;
 
 namespace conf {
@@ -105,7 +111,7 @@ std::ostream& operator<<(std::ostream& out, holder<std::time_t> const& t) {
   auto time = static_cast<std::time_t>(t);
   char buf[sizeof "2011-10-08t07:07:09z-0430"];
   struct tm result;
-  gmtime_s(&result, &time);
+  gmt(&time, &result);
   strftime(buf, sizeof buf, "%FT%TZ%z", &result);
   return out << buf;
 }
