@@ -82,6 +82,17 @@ void simple_config::int_param(int& mem, int const& default_value,
   template_param(mem, default_value, name, desc);
 }
 
+void simple_config::size_t_param(size_t& mem, std::string const& name,
+                                 std::string const& desc) {
+  size_t_param(mem, 0, name, desc);
+}
+
+void simple_config::size_t_param(size_t& mem, size_t const& default_value,
+                                 std::string const& name,
+                                 std::string const& desc) {
+  template_param(mem, default_value, name, desc);
+}
+
 void simple_config::string_param(std::string& mem, std::string const& name,
                                  std::string const& desc) {
   string_param(mem, "", name, desc);

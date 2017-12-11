@@ -37,6 +37,11 @@ public:
   void int_param(int& mem, int const& default_value, std::string const& name,
                  std::string const& desc);
 
+  void size_t_param(size_t& mem, std::string const& name,
+                    std::string const& desc);
+  void size_t_param(size_t& mem, size_t const& default_value,
+                    std::string const& name, std::string const& desc);
+
   void string_param(std::string& mem, std::string const& name,
                     std::string const& desc);
   void string_param(std::string& mem, std::string const& default_value,
@@ -59,6 +64,12 @@ public:
   void template_param(T& mem, T const& default_value, std::string const& name,
                       std::string const& desc) {
     add_param(make_param(mem, default_value, name, desc));
+  }
+
+  template <typename T>
+  void template_param(T& mem, std::string const& name,
+                      std::string const& desc) {
+    add_param(make_param(mem, T{}, name, desc));
   }
 
 protected:
