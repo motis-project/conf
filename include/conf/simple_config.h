@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ctime>
 #include <memory>
 #include <ostream>
 #include <string>
@@ -36,6 +37,11 @@ public:
   void int_param(int& mem, std::string const& name, std::string const& desc);
   void int_param(int& mem, int const& default_value, std::string const& name,
                  std::string const& desc);
+
+  void time_t_param(std::time_t& mem, std::string const& name,
+                    std::string const& desc);
+  void time_t_param(std::time_t& mem, std::time_t const& default_value,
+                    std::string const& name, std::string const& desc);
 
   void size_t_param(size_t& mem, std::string const& name,
                     std::string const& desc);
