@@ -96,7 +96,7 @@ void simple_config::time_t_param(std::time_t& mem,
 
 void simple_config::size_t_param(size_t& mem, std::string const& name,
                                  std::string const& desc) {
-  size_t_param(mem, 0, name, desc);
+  size_t_param(mem, mem, name, desc);
 }
 
 void simple_config::size_t_param(size_t& mem, size_t const& default_value,
