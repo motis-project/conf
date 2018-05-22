@@ -84,7 +84,7 @@ void simple_config::int_param(int& mem, int const& default_value,
 
 void simple_config::time_t_param(std::time_t& mem, std::string const& name,
                                  std::string const& desc) {
-  time_t_param(mem, 0, name, desc);
+  template_param(mem, mem, name, desc);
 }
 
 void simple_config::time_t_param(std::time_t& mem,

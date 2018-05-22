@@ -1,8 +1,8 @@
 #pragma once
 
 #include <ostream>
-#include <string>
 #include <sstream>
+#include <string>
 
 #include "boost/program_options.hpp"
 

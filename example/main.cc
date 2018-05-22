@@ -96,10 +96,11 @@ std::ostream& operator<<(std::ostream& out, isolation_level_t const& lvl) {
 
 class database_settings : public conf::simple_config {
 public:
-  database_settings(std::string const& url = "localhost:5432", int timeout = 30,
-                    bool retry = false, isolation_level_t isolation_lvl =
-                                            isolation_level_t::SERIALIZABLE,
-                    std::vector<std::string> flags = {})
+  database_settings(
+      std::string const& url = "localhost:5432", int timeout = 30,
+      bool retry = false,
+      isolation_level_t isolation_lvl = isolation_level_t::SERIALIZABLE,
+      std::vector<std::string> flags = {})
       : simple_config("Database Options", "db") {
     string_param(url_, url, "url", "the Database URL");
     int_param(timeout_, timeout, "timeout", "connection timeout (in seconds)");
@@ -120,8 +121,8 @@ class doomsday_settings : public conf::simple_config {
 public:
   doomsday_settings(
       std::time_t const apocalypse = conf::parse_date_time("2012-12-21"))
-      : simple_config("Doomsday Options", "doom") {
-    template_param(apocalypse_, {apocalypse}, "apocalypse", "THE END IS NEAR!");
+      : simple_config("Doomsday Options", "doom"), apocalypse_{apocalypse} {
+    time_t_param(apocalypse_, "apocalypse", "THE END IS NEAR!");
   }
 
   conf::holder<std::time_t> apocalypse_;
