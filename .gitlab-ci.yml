@@ -26,7 +26,7 @@ clang-debug-asan:
     - export CC=clang
     - mkdir -p build-asan
     - cd build-asan
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake -GNinja -DCMAKE_BUILD_TYPE=Debug ..
     - ninja -j8 conf-example conf-test
     - ./conf-example
     - ./conf-test
@@ -57,7 +57,7 @@ msvc-release:
     - set BOOST_ROOT=C:\boost_1_60_0
     - mkdir build-msvc-release
     - cd build-msvc-release
-    - cmake -G "NMake Makefiles JOM" -DCMAKE_BUILD_TYPE=Release -DZLIB_ROOT=C:\zlib-1.2.8 ..
-    - jom conf-example conf-test
+    - cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DZLIB_ROOT=C:\zlib-1.2.8 ..
+    - ninja conf-example conf-test
     - conf-example
     - conf-test
