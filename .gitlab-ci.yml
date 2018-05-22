@@ -1,62 +1,48 @@
 variables:
   ASAN_SYMBOLIZER_PATH: "/usr/bin/llvm-symbolizer"
 
-# GCC 5 production
-gcc-5-release:
+# GCC production
+gcc-release:
   tags:
-    - xenial
+    - bionic
   script:
-    - export BOOST_ROOT=/opt/boost_1_60_0-gcc-5
-    - mkdir -p build-gcc-5
-    - cd build-gcc-5
-    - cmake -DCMAKE_BUILD_TYPE=Release ..
+    - export BOOST_ROOT=/opt/boost_1_67_0-gcc-7
+    - mkdir -p build-release
+    - cd build-release
+    - cmake -GNinja -DCMAKE_BUILD_TYPE=Release ..
     - make -j8 conf-example conf-test
     - ./conf-example
     - ./conf-test
 
-# Clang 3.8 debug with address sanitizer
-clang-3.8-debug-asan:
+# Clang debug with address sanitizer
+clang-debug-asan:
   tags:
-    - xenial
+    - bionic
   script:
+    - export ASAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer
     - export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer"
-    - export BOOST_ROOT=/opt/boost_1_60_0-clang-3.8
-    - export CXX=clang++-3.8
-    - export CC=clang-3.8
+    - export BOOST_ROOT=/opt/boost_1_67_0-gcc-7
+    - export CXX=clang++
+    - export CC=clang
     - mkdir -p build-asan
     - cd build-asan
     - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - make -j8 conf-example conf-test
+    - ninja -j8 conf-example conf-test
     - ./conf-example
     - ./conf-test
 
 
-# Clang 3.8 debug with thread sanitizer
-clang-3.8-debug-tsan:
+# GCC debug valgrind
+gcc-debug-valgrind:
   tags:
-    - xenial
+    - bionic
   script:
-    - export CXXFLAGS="-fsanitize=thread -fno-omit-frame-pointer"
-    - export BOOST_ROOT=/opt/boost_1_60_0-clang-3.8
-    - export CXX=clang++-3.8
-    - export CC=clang-3.8
-    - mkdir -p build-tsan
-    - cd build-tsan
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - make -j8 conf-example conf-test
-    - ./conf-example
-    - ./conf-test
-
-# GCC 5 debug valgrind
-gcc-5-debug-valgrind:
-  tags:
-    - xenial
-  script:
-    - export BOOST_ROOT=/opt/boost_1_60_0-gcc-5
-    - mkdir -p build-gcc-5-valgrind
-    - cd build-gcc-5-valgrind
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - make -j8 conf-example conf-test
+    - export BOOST_ROOT=/opt/boost_1_67_0-gcc-7
+    - git submodule update --init --recursive
+    - mkdir -p build-gcc-debug-valgrind
+    - cd build-gcc-debug-valgrind
+    - cmake -GNinja -DCMAKE_BUILD_TYPE=Debug ..
+    - ninja -j8 conf-example conf-test
     - valgrind --error-exitcode=1 --show-reachable=yes --leak-check=full ./conf-example
     - valgrind --error-exitcode=1 --show-reachable=yes --leak-check=full ./conf-test
 
