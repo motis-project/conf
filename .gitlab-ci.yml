@@ -10,7 +10,7 @@ gcc-release:
     - mkdir -p build-release
     - cd build-release
     - cmake -GNinja -DCMAKE_BUILD_TYPE=Release ..
-    - make -j8 conf-example conf-test
+    - ninja conf-example conf-test
     - ./conf-example
     - ./conf-test
 
@@ -27,7 +27,7 @@ clang-debug-asan:
     - mkdir -p build-asan
     - cd build-asan
     - cmake -GNinja -DCMAKE_BUILD_TYPE=Debug ..
-    - ninja -j8 conf-example conf-test
+    - ninja conf-example conf-test
     - ./conf-example
     - ./conf-test
 
@@ -42,7 +42,7 @@ gcc-debug-valgrind:
     - mkdir -p build-gcc-debug-valgrind
     - cd build-gcc-debug-valgrind
     - cmake -GNinja -DCMAKE_BUILD_TYPE=Debug ..
-    - ninja -j8 conf-example conf-test
+    - ninja conf-example conf-test
     - valgrind --error-exitcode=1 --show-reachable=yes --leak-check=full ./conf-example
     - valgrind --error-exitcode=1 --show-reachable=yes --leak-check=full ./conf-test
 
