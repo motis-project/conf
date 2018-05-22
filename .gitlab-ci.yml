@@ -57,7 +57,7 @@ msvc-release:
     - set BOOST_ROOT=C:\boost_1_60_0
     - mkdir build-msvc-release
     - cd build-msvc-release
-    - cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DZLIB_ROOT=C:\zlib-1.2.8 ..
+    - cmake -GNinja -DCMAKE_BUILD_TYPE=Release ..
     - ninja conf-example conf-test
     - conf-example
     - conf-test
