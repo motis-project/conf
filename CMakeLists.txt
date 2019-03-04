@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.12)
 project(conf)
 
 if (MSVC)
@@ -26,10 +26,10 @@ find_package(Boost COMPONENTS system program_options REQUIRED)
 link_directories(${Boost_LIBRARY_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 
-include_directories("./include")
 
 file(GLOB_RECURSE CONF_SOURCES "src/*.cc")
 add_library(conf STATIC ${CONF_SOURCES})
+target_include_directories(conf INTERFACE include)
 
 if(MSVC)
   target_link_libraries(conf ${Boost_LIBRARIES})
