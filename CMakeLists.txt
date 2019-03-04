@@ -29,7 +29,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 
 file(GLOB_RECURSE CONF_SOURCES "src/*.cc")
 add_library(conf STATIC ${CONF_SOURCES})
-target_include_directories(conf INTERFACE include)
+target_include_directories(conf PUBLIC include)
 
 if(MSVC)
   target_link_libraries(conf ${Boost_LIBRARIES})
