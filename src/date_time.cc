@@ -67,7 +67,7 @@ time_duration parse_offset(std::string const& offset_str) {
   if (m[2].length() > 0) {
     offset += minutes(std::stoi(m[2]));
   }
-  return offset;
+  return std::move(offset);
 }
 
 std::time_t parse_date_time(std::string const& str) {
