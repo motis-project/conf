@@ -12,7 +12,7 @@ namespace boost {
 namespace program_options {
 class options_description;
 }
-}
+}  // namespace boost
 
 namespace conf {
 class abstract_param;
@@ -25,7 +25,7 @@ std::unique_ptr<abstract_param> make_param(T& mem, T const& default_value,
 class simple_config : public conf::configuration {
 public:
   simple_config(std::string const name, std::string const prefix = "");
-  virtual ~simple_config();
+  virtual ~simple_config() override;
 
   simple_config(simple_config const&) = delete;
   simple_config& operator=(simple_config const&) = delete;
