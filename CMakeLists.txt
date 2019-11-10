@@ -29,6 +29,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 
 file(GLOB_RECURSE CONF_SOURCES "src/*.cc")
 add_library(conf STATIC ${CONF_SOURCES})
+target_compile_features(conf PUBLIC cxx_std_17)
 target_include_directories(conf PUBLIC include)
 
 if(MSVC)
@@ -40,7 +41,7 @@ if(MSVC)
   set_target_properties(conf PROPERTIES COMPILE_DEFINITIONS "${_def}")
 elseif(MINGW)
   target_link_libraries(conf -Wl,-Bstatic ${Boost_LIBRARIES})
-  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-std=c++11")
+  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-std=c++17")
   set(_def
     BOOST_THREAD_USE_LIB
     WINVER=0x0501
@@ -49,15 +50,13 @@ elseif(MINGW)
   )
   set_target_properties(conf PROPERTIES COMPILE_DEFINITIONS "${_def}")
 else()
-  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-Wall -Wextra -std=c++11")
+  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-Wall -Wextra -std=c++17")
   target_link_libraries(conf ${Boost_LIBRARIES})
 endif()
 
 add_executable(conf-example EXCLUDE_FROM_ALL example/main.cc)
 target_link_libraries(conf-example ${Boost_LIBRARIES} conf)
-set_target_properties(conf-example PROPERTIES COMPILE_FLAGS "-std=c++11")
 
 file(GLOB_RECURSE conf-test-files test/*.cc)
 add_executable(conf-test EXCLUDE_FROM_ALL ${conf-test-files})
 target_link_libraries(conf-test ${Boost_LIBRARIES} conf)
-set_target_properties(conf-test PROPERTIES COMPILE_FLAGS "-std=c++11")

@@ -1,7 +1,7 @@
 #include "conf/options_parser.h"
 
-#include <istream>
 #include <fstream>
+#include <istream>
 
 namespace po = boost::program_options;
 
@@ -29,7 +29,7 @@ options_parser::options_parser(std::vector<configuration*> options)
     : desc_("General") {
   std::copy_if(std::begin(options), std::end(options),
                std::back_inserter(options_),
-               [](configuration* c) { return !c->empty_config(); });
+               [](configuration* c) { return !c->empty(); });
   configure_description();
 }
 
@@ -49,7 +49,7 @@ void options_parser::configure_description() {
   }
 }
 
-void options_parser::read_command_line_args(int argc, char* argv[],
+void options_parser::read_command_line_args(int argc, char const* argv[],
                                             bool allow_unreg) {
   auto p = po::command_line_parser(argc, argv);
   generic_read_command_line_args(p, desc_, vm_, unrecog_, allow_unreg);
@@ -85,7 +85,7 @@ bool options_parser::list_options() const { return vm_.count("options") >= 1; }
 void options_parser::print_used(std::ostream& out) {
   out << "Used Options:\n\n";
   for (auto const& option : options_) {
-    if (!option->empty_config()) {
+    if (!option->empty()) {
       out << *option << "\n\n";
     }
   }

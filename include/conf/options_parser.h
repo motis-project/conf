@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <ostream>
 #include <string>
+#include <vector>
 
 #include "boost/program_options.hpp"
 
@@ -15,7 +15,8 @@ public:
   options_parser(std::vector<configuration*> options);
 
   void configure_description();
-  void read_command_line_args(int argc, char* argv[], bool allow_unreg = true);
+  void read_command_line_args(int argc, char const* argv[],
+                              bool allow_unreg = true);
   void read_command_line_args(std::vector<std::string> const& args,
                               bool allow_unreg = true);
   void read_configuration_file(bool allow_unreg = true);

@@ -3,8 +3,6 @@
 #include "conf/configuration.h"
 #include "conf/date_time.h"
 #include "conf/options_parser.h"
-#include "conf/simple_config.h"
-#include "conf/simple_config_param.h"
 
 #include "boost/program_options.hpp"
 
@@ -13,37 +11,14 @@
 
 namespace po = boost::program_options;
 
-class listener_settings : public conf::configuration {
-public:
-  friend std::ostream& operator<<(std::ostream& out,
-                                  listener_settings const& options);
-
-  listener_settings(std::string default_host, std::string default_port)
-      : host(default_host), port(default_port) {}
-
-  virtual ~listener_settings() {}
-
-  virtual boost::program_options::options_description desc() override {
-    po::options_description desc("Listener Options");
-    desc.add_options()(HOST, po::value<std::string>(&host)->default_value(host),
-                       "host to listen on (e.g. 0.0.0.0 or 127.0.0.1)")(
-        PORT, po::value<std::string>(&port)->default_value(port),
-        "port to listen on (e.g. 8080)");
-    return desc;
+struct listener_settings : public conf::configuration {
+  listener_settings() : configuration("Listener Options", "listener") {
+    param(host, "host", "Hostname");
+    param(port, "port", "Port number");
   }
 
-  virtual void print(std::ostream& out) const override {
-    out << "  " << HOST << ": " << host << "\n"
-        << "  " << PORT << ": " << port;
-  }
-
-  std::string host, port;
+  std::string host{"0.0.0.0"}, port{"8080"};
 };
-
-std::ostream& operator<<(std::ostream& out, const listener_settings& options) {
-  options.print(out);
-  return out;
-}
 
 enum class isolation_level_t {
   SERIALIZABLE,
@@ -94,43 +69,34 @@ std::ostream& operator<<(std::ostream& out, isolation_level_t const& lvl) {
   return out;
 }
 
-class database_settings : public conf::simple_config {
-public:
-  database_settings(
-      std::string const& url = "localhost:5432", int timeout = 30,
-      bool retry = false,
-      isolation_level_t isolation_lvl = isolation_level_t::SERIALIZABLE,
-      std::vector<std::string> flags = {})
-      : simple_config("Database Options", "db") {
-    string_param(url_, url, "url", "the Database URL");
-    int_param(timeout_, timeout, "timeout", "connection timeout (in seconds)");
-    bool_param(retry_, retry, "retry", "retry on connection loss");
-    template_param(isolation_lvl_, isolation_lvl, "isolation_lvl",
-                   "default isolation level for transactions");
-    multitoken_param(flags_, flags, "flags", "forwarded flags");
+struct database_settings : public conf::configuration {
+  database_settings() : configuration("Database Options", "db") {
+    param(url_, "url", "the Database URL");
+    param(timeout_, "timeout", "connection timeout (in seconds)");
+    param(retry_, "retry", "retry on connection loss");
+    param(isolation_lvl_, "isolation_lvl",
+          "default isolation level for transactions");
+    param(flags_, "flags", "forwarded flags");
   }
 
-  std::string url_;
-  int timeout_;
-  bool retry_;
-  isolation_level_t isolation_lvl_;
+  std::string url_{"localhost:5432"};
+  int timeout_{30};
+  bool retry_{false};
+  isolation_level_t isolation_lvl_{isolation_level_t::SERIALIZABLE};
   std::vector<std::string> flags_;
 };
 
-class doomsday_settings : public conf::simple_config {
-public:
-  doomsday_settings(
-      std::time_t const apocalypse = conf::parse_date_time("2012-12-21"))
-      : simple_config("Doomsday Options", "doom"), apocalypse_{apocalypse} {
-    time_t_param(apocalypse_, "apocalypse", "THE END IS NEAR!");
+struct doomsday_settings : public conf::configuration {
+  doomsday_settings() : configuration("Doomsday Options", "doom") {
+    param(apocalypse_, "apocalypse", "THE END IS NEAR!");
   }
 
-  conf::holder<std::time_t> apocalypse_;
+  conf::holder<std::time_t> apocalypse_{conf::parse_date_time("2012-12-21")};
 };
 
 int main(int argc, char* argv[]) {
-  listener_settings listener_opt("0.0.0.0", "8080");
-  database_settings database_opt("db1.example.com");
+  listener_settings listener_opt;
+  database_settings database_opt;
   doomsday_settings doomsday_opt;
   conf::options_parser parser({&listener_opt, &database_opt, &doomsday_opt});
   parser.read_command_line_args(argc, argv);
