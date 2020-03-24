@@ -10,3 +10,4 @@ AlignTrailingComments: false
 KeepEmptyLinesAtTheStartOfBlocks: true
 AllowShortCaseLabelsOnASingleLine: true
 AlwaysBreakTemplateDeclarations: true
+IncludeBlocks: Preserve
