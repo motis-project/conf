@@ -94,7 +94,7 @@ struct doomsday_settings : public conf::configuration {
   conf::holder<std::time_t> apocalypse_{conf::parse_date_time("2012-12-21")};
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char const* argv[]) {
   listener_settings listener_opt;
   database_settings database_opt;
   doomsday_settings doomsday_opt;
