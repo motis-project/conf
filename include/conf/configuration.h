@@ -8,7 +8,8 @@
 
 namespace std {
 
-inline ostream& operator<<(ostream& out, vector<string> const& v) {
+template <typename T>
+ostream& operator<<(ostream& out, vector<T> const& v) {
   for (auto i = 0U; i < v.size(); ++i) {
     if (i != 0) {
       out << ", ";
