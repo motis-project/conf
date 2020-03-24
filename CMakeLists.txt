@@ -1,26 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(conf)
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 if (MSVC)
   set(Boost_USE_STATIC_LIBS ON)
   set(Boost_USE_MULTITHREADED ON)
   set(Boost_USE_STATIC_RUNTIME ON)
 endif()
-
-# from gtest: googletest/cmake/internal_utils.cmake
-# macro(fix_default_compiler_settings_)
-if (MSVC)
-  foreach (flag_var
-           CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-           CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-    if (NOT BUILD_SHARED_LIBS AND NOT gtest_force_shared_crt)
-      string(REPLACE "/MD" "-MT" ${flag_var} "${${flag_var}}")
-    endif()
-
-    string(REPLACE "/W3" "/W4" ${flag_var} "${${flag_var}}")
-  endforeach()
-endif()
-# endmacro()
 
 find_package(Boost COMPONENTS system program_options REQUIRED)
 link_directories(${Boost_LIBRARY_DIRS})
@@ -50,7 +37,7 @@ elseif(MINGW)
   )
   set_target_properties(conf PROPERTIES COMPILE_DEFINITIONS "${_def}")
 else()
-  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-Wall -Wextra -std=c++17")
+  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-Wall -Wextra")
   target_link_libraries(conf ${Boost_LIBRARIES})
 endif()
 
