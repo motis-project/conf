@@ -30,6 +30,5 @@ jobs:
 
       - name: Run Tests
         run: |
-          cd build
-          conf-test.exe
-          conf-example.exe
+          .\build\conf-test.exe
+          .\build\conf-example.exe
