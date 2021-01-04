@@ -3,21 +3,13 @@ project(conf)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-if (MSVC)
-  set(Boost_USE_STATIC_LIBS ON)
-  set(Boost_USE_MULTITHREADED ON)
-  set(Boost_USE_STATIC_RUNTIME ON)
-endif()
-
-find_package(Boost COMPONENTS system program_options REQUIRED)
-link_directories(${Boost_LIBRARY_DIRS})
-include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-
+include(cmake/pkg.cmake)
 
 file(GLOB_RECURSE CONF_SOURCES "src/*.cc")
 add_library(conf STATIC ${CONF_SOURCES})
 target_compile_features(conf PUBLIC cxx_std_17)
 target_include_directories(conf PUBLIC include)
+target_link_libraries(conf boost-program_options)
 
 if(MSVC)
   target_link_libraries(conf ${Boost_LIBRARIES})
@@ -28,7 +20,6 @@ if(MSVC)
   set_target_properties(conf PROPERTIES COMPILE_DEFINITIONS "${_def}")
 elseif(MINGW)
   target_link_libraries(conf -Wl,-Bstatic ${Boost_LIBRARIES})
-  set_target_properties(conf PROPERTIES COMPILE_FLAGS "-std=c++17")
   set(_def
     BOOST_THREAD_USE_LIB
     WINVER=0x0501

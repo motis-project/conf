@@ -15,20 +15,21 @@ jobs:
         mode: [Debug, Release]
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: microsoft/setup-msbuild@v1.0.0
+      - uses: actions/checkout@v2
+      - uses: seanmiddleditch/gha-setup-ninja@master
 
-    - name: env
-      run: echo "::set-env name=BOOST_ROOT::$env:BOOST_ROOT_1_72_0"
+      - name: CMake
+        run: |
+          $env:BOOST_ROOT = $env:BOOST_ROOT_1_72_0
+          $devShell = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -find **\Microsoft.VisualStudio.DevShell.dll
+          $installPath = &"${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationpath
+          Import-Module $devShell
+          Enter-VsDevShell -VsInstallPath $installPath -SkipAutomaticLocation -DevCmdArguments "-arch=amd64"
+          cmake -GNinja -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.mode }}
+          cmake --build build --target conf-test conf-example
 
-    - name: CMake
-      run: cmake -G "Visual Studio 16 2019" -A x64 -S . -B build
-
-    - name: Build
-      run: cmake --build build --target conf-example conf-test --config ${{ matrix.mode }}
-
-    - name: Run tests
-      run: |
-        cd build
-        ${{ matrix.mode }}\conf-test.exe
-        ${{ matrix.mode }}\conf-example.exe
+      - name: Run Tests
+        run: |
+          cd build
+          conf-test.exe
+          conf-example.exe
