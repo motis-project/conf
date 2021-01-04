@@ -1,0 +1,4 @@
+[boost]
+  url=git@github.com:motis-project/boost.git
+  branch=master
+  commit=03a2fc17e1104524da91e3a8a55ca6e09190b4c9
