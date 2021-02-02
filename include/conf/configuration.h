@@ -6,7 +6,7 @@
 
 #include "boost/program_options/options_description.hpp"
 
-namespace std {
+namespace std {  // NOLINT(cert-dcl58-cpp)
 
 template <typename T>
 ostream& operator<<(ostream& out, vector<T> const& v) {
@@ -65,9 +65,10 @@ public:
 
 protected:
   template <typename T>
-  void param(T& p, std::string const& name, std::string const& desc) {
-    auto& new_param = params_.emplace_back(
-        std::unique_ptr<parameter>(new template_param(p, name, desc)));
+  // NOLINTNEXTLINE(performance-unnecessary-value-param)
+  void param(T& p, std::string name, std::string desc) {
+    auto& new_param = params_.emplace_back(std::unique_ptr<parameter>(
+        new template_param(p, std::move(name), std::move(desc))));
     if (!prefix_.empty()) {
       new_param->name_ = prefix_ + "." + new_param->name_;
     }
@@ -75,8 +76,12 @@ protected:
 
 private:
   struct parameter {
-    parameter(std::string name, std::string desc)
+    parameter(std::string&& name, std::string&& desc)
         : name_{std::move(name)}, desc_{std::move(desc)} {}
+    parameter(parameter const&) = default;
+    parameter(parameter&&) noexcept = default;
+    parameter& operator=(parameter const&) = default;
+    parameter& operator=(parameter&&) noexcept = default;
     virtual ~parameter() = default;
 
     virtual void append_description(
@@ -98,8 +103,12 @@ private:
     };
 
   public:
-    template_param(T& mem, std::string name, std::string desc)
+    template_param(T& mem, std::string&& name, std::string&& desc)
         : parameter{std::move(name), std::move(desc)}, val_{mem} {}
+    template_param(template_param const&) = default;
+    template_param(template_param&&) noexcept = default;
+    template_param& operator=(template_param const&) = default;
+    template_param& operator=(template_param&&) noexcept = default;
     ~template_param() override = default;
 
     void append_description(

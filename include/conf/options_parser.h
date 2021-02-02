@@ -12,7 +12,7 @@ namespace conf {
 
 class options_parser {
 public:
-  options_parser(std::vector<configuration*> options);
+  explicit options_parser(std::vector<configuration*> options);
 
   void configure_description();
   void read_command_line_args(int argc, char const* argv[],
