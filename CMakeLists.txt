@@ -12,14 +12,13 @@ target_include_directories(conf PUBLIC include)
 target_link_libraries(conf boost-program_options)
 
 if(MSVC)
-  target_link_libraries(conf ${Boost_LIBRARIES})
   set(_def
     _VARIADIC_MAX=10
     _WIN32_WINNT=0x0501
   )
   set_target_properties(conf PROPERTIES COMPILE_DEFINITIONS "${_def}")
 elseif(MINGW)
-  target_link_libraries(conf -Wl,-Bstatic ${Boost_LIBRARIES})
+  target_link_libraries(conf -Wl,-Bstatic)
   set(_def
     BOOST_THREAD_USE_LIB
     WINVER=0x0501
@@ -29,12 +28,11 @@ elseif(MINGW)
   set_target_properties(conf PROPERTIES COMPILE_DEFINITIONS "${_def}")
 else()
   set_target_properties(conf PROPERTIES COMPILE_FLAGS "-Wall -Wextra")
-  target_link_libraries(conf ${Boost_LIBRARIES})
 endif()
 
 add_executable(conf-example EXCLUDE_FROM_ALL example/main.cc)
-target_link_libraries(conf-example ${Boost_LIBRARIES} conf)
+target_link_libraries(conf-example conf)
 
 file(GLOB_RECURSE conf-test-files test/*.cc)
 add_executable(conf-test EXCLUDE_FROM_ALL ${conf-test-files})
-target_link_libraries(conf-test ${Boost_LIBRARIES} conf)
+target_link_libraries(conf-test conf)
