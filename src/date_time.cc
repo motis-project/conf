@@ -8,8 +8,6 @@
 #include "boost/algorithm/string.hpp"
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
-#include "conf/holder.h"
-
 #ifdef _MSC_VER
 #define gmt(a, b) gmtime_s(b, a)
 #else
@@ -101,15 +99,15 @@ std::time_t parse_date_time(std::string const& str) {
   return (t - epoch).total_seconds();
 }
 
-std::istream& operator>>(std::istream& in, holder<std::time_t>& result) {
+std::istream& operator>>(std::istream& in, time& result) {
   std::string token;
   in >> token;
-  result = parse_date_time(token);
+  result.unix_time_ = parse_date_time(token);
   return in;
 }
 
-std::ostream& operator<<(std::ostream& out, holder<std::time_t> const& t) {
-  auto time = static_cast<std::time_t>(t);
+std::ostream& operator<<(std::ostream& out, time const& t) {
+  auto time = static_cast<std::time_t>(t.unix_time_);
   char buf[sizeof "2011-10-08t07:07:09z-0430"];
   struct tm result {};
   gmt(&time, &result);
