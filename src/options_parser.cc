@@ -41,7 +41,11 @@ void options_parser::configure_description() {
     ("version", "print version")
     ("config,c",
         po::value<std::string>(&file_)->default_value("config.ini"),
-        "config path");
+        "config path")
+    ("system_config",
+        po::value<std::string>(&system_config_file_)
+            ->default_value("system_config.ini"),
+        "system config path");
   // clang-format on
 
   for (auto& option : options_) {
@@ -62,18 +66,22 @@ void options_parser::read_command_line_args(
 }
 
 void options_parser::read_configuration_file(bool allow_unreg) {
-  std::ifstream ifs(file_.c_str());
-  if (ifs) {
-    auto parsed_file_options = po::parse_config_file(ifs, desc_, allow_unreg);
+  auto const read = [&](std::string const& file) {
+    std::ifstream ifs(file.c_str());
+    if (ifs) {
+      auto parsed_file_options = po::parse_config_file(ifs, desc_, allow_unreg);
 
-    // Add unrecognized file options to the global unrecognized options.
-    auto unrecog_file = po::collect_unrecognized(parsed_file_options.options,
-                                                 po::include_positional);
-    unrecog_.insert(unrecog_.end(), unrecog_file.begin(), unrecog_file.end());
+      // Add unrecognized file options to the global unrecognized options.
+      auto unrecog_file = po::collect_unrecognized(parsed_file_options.options,
+                                                   po::include_positional);
+      unrecog_.insert(unrecog_.end(), unrecog_file.begin(), unrecog_file.end());
 
-    po::store(parsed_file_options, vm_);
-    po::notify(vm_);
-  }
+      po::store(parsed_file_options, vm_);
+      po::notify(vm_);
+    }
+  };
+  read(file_);
+  read(system_config_file_);
 }
 
 bool options_parser::help() { return vm_.count("help") >= 1; }

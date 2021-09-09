@@ -29,7 +29,7 @@ public:
   void print_options(std::ostream& out) const;
 
 private:
-  std::string file_;
+  std::string file_, system_config_file_;
   boost::program_options::options_description desc_;
   std::vector<std::string> unrecog_;
   boost::program_options::variables_map vm_;
