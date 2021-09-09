@@ -3,7 +3,6 @@
 #include <ctime>
 
 #include "conf/date_time.h"
-#include "conf/holder.h"
 
 namespace conf {
 
@@ -13,7 +12,7 @@ TEST_CASE("conf", "date") {
   };
 
   SECTION("now") {
-    auto const now = time(nullptr);
+    auto const now = std::time(nullptr);
     CHECK(parse_date_time("NOW") > now - 60);
     CHECK(parse_date_time("NOW") < now + 60);
   };

@@ -5,7 +5,6 @@
 
 #include "conf/configuration.h"
 #include "conf/date_time.h"
-#include "conf/holder.h"
 #include "conf/options_parser.h"
 
 struct my_conf : public conf::configuration {
@@ -20,7 +19,7 @@ struct my_conf : public conf::configuration {
   std::string a_;
   int b_{0U};
   char c_{'a'};
-  conf::holder<time_t> d_{0U};
+  conf::time d_{0U};
   std::vector<std::string> e_{{"a"}, {"b"}};
 };
 

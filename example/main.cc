@@ -91,7 +91,7 @@ struct doomsday_settings : public conf::configuration {
     param(apocalypse_, "apocalypse", "THE END IS NEAR!");
   }
 
-  conf::holder<std::time_t> apocalypse_{conf::parse_date_time("2012-12-21")};
+  conf::time apocalypse_{conf::parse_date_time("2012-12-21")};
 };
 
 int main(int argc, char const* argv[]) {
