@@ -20,6 +20,7 @@ public:
   void read_command_line_args(std::vector<std::string> const& args,
                               bool allow_unreg = true);
   void read_configuration_file(bool allow_unreg = true);
+  void read_environment(std::string const& prefix);
   bool help();
   void print_help(std::ostream& out);
   bool version();

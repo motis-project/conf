@@ -1,5 +1,6 @@
 #include "conf/options_parser.h"
 
+#include <boost/algorithm/string/predicate.hpp>
 #include <fstream>
 #include <istream>
 
@@ -82,6 +83,30 @@ void options_parser::read_configuration_file(bool allow_unreg) {
   };
   read(file_);
   read(system_config_file_);
+}
+
+void options_parser::read_environment(std::string const& prefix) {
+  po::store(po::parse_environment(
+                desc_,
+                [&](std::string env_var) -> std::string {
+                  if (!boost::starts_with(env_var, prefix)) {
+                    return "";
+                  }
+
+                  env_var = env_var.substr(prefix.size());
+
+                  std::transform(env_var.begin(), env_var.end(),
+                                 env_var.begin(), [](char const c) {
+                                   if (c == '_') {
+                                     return '.';
+                                   } else {
+                                     return static_cast<char>(std::tolower(c));
+                                   }
+                                 });
+
+                  return env_var;
+                }),
+            vm_);
 }
 
 bool options_parser::help() { return vm_.count("help") >= 1; }
