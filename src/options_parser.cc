@@ -95,14 +95,20 @@ void options_parser::read_environment(std::string const& prefix) {
 
                   env_var = env_var.substr(prefix.size());
 
-                  std::transform(env_var.begin(), env_var.end(),
-                                 env_var.begin(), [](char const c) {
-                                   if (c == '_') {
-                                     return '.';
-                                   } else {
-                                     return static_cast<char>(std::tolower(c));
-                                   }
-                                 });
+                  for (auto it = begin(env_var); it != end(env_var); ++it) {
+                    auto const c = *it;
+                    auto const next =
+                        std::next(it) == end(env_var) ? '\0' : *std::next(it);
+                    if (c == '_') {
+                      if (next == '_') {
+                        it = env_var.erase(it);
+                      } else {
+                        *it = '.';
+                      }
+                    } else {
+                      *it = static_cast<char>(std::tolower(c));
+                    }
+                  }
 
                   return env_var;
                 }),
