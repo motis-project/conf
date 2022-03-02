@@ -1,8 +1,10 @@
 #include "conf/options_parser.h"
 
-#include <boost/algorithm/string/predicate.hpp>
+#include <algorithm>
 #include <fstream>
 #include <istream>
+
+#include "boost/algorithm/string/predicate.hpp"
 
 namespace po = boost::program_options;
 
@@ -86,33 +88,38 @@ void options_parser::read_configuration_file(bool allow_unreg) {
 }
 
 void options_parser::read_environment(std::string const& prefix) {
-  po::store(po::parse_environment(
-                desc_,
-                [&](std::string env_var) -> std::string {
-                  if (!boost::starts_with(env_var, prefix)) {
-                    return "";
-                  }
+  po::store(
+      po::parse_environment(
+          desc_,
+          [&](std::string env_var) -> std::string {
+            if (!boost::starts_with(env_var, prefix)) {
+              return "";
+            }
 
-                  env_var = env_var.substr(prefix.size());
+            env_var = env_var.substr(prefix.size());
 
-                  for (auto it = begin(env_var); it != end(env_var); ++it) {
-                    auto const c = *it;
-                    auto const next =
-                        std::next(it) == end(env_var) ? '\0' : *std::next(it);
-                    if (c == '_') {
-                      if (next == '_') {
-                        it = env_var.erase(it);
-                      } else {
-                        *it = '.';
-                      }
-                    } else {
-                      *it = static_cast<char>(std::tolower(c));
-                    }
-                  }
+            for (auto it = begin(env_var); it != end(env_var); ++it) {
+              auto const c = *it;
+              auto const next =
+                  std::next(it) == end(env_var) ? '\0' : *std::next(it);
+              if (c == '_') {
+                if (next == '_') {
+                  it = env_var.erase(it);
+                } else {
+                  *it = '.';
+                }
+              } else {
+                *it = static_cast<char>(std::tolower(c));
+              }
+            }
 
-                  return env_var;
-                }),
-            vm_);
+            return std::any_of(
+                       begin(desc_.options()), end(desc_.options()),
+                       [&](auto&& opt) { return env_var == opt->long_name(); })
+                       ? env_var
+                       : "";
+          }),
+      vm_);
 }
 
 bool options_parser::help() { return vm_.count("help") >= 1; }
