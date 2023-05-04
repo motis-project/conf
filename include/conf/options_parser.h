@@ -28,6 +28,7 @@ public:
   void print_unrecognized(std::ostream& out);
   bool list_options() const;
   void print_options(std::ostream& out) const;
+  std::string file() const;
 
 private:
   std::string file_, system_config_file_;

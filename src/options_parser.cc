@@ -87,6 +87,8 @@ void options_parser::read_configuration_file(bool allow_unreg) {
   read(system_config_file_);
 }
 
+std::string options_parser::file() const { return file_; }
+
 void options_parser::read_environment(std::string const& prefix) {
   po::store(
       po::parse_environment(
