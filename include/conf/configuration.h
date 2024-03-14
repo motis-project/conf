@@ -25,12 +25,11 @@ namespace conf {
 
 class configuration {
 public:
-  explicit configuration(std::string name, std::string prefix = "")
-      : name_{std::move(name)}, prefix_{std::move(prefix)} {}
-  virtual ~configuration() = default;
+  explicit configuration(std::string name, std::string prefix = "");
+  virtual ~configuration();
 
-  configuration(configuration&&) = default;
-  configuration& operator=(configuration&&) = default;
+  configuration(configuration&&);
+  configuration& operator=(configuration&&);
 
   configuration(configuration const&) = delete;
   configuration& operator=(configuration const&) = delete;
@@ -68,7 +67,7 @@ protected:
   // NOLINTNEXTLINE(performance-unnecessary-value-param)
   void param(T& p, std::string name, std::string desc) {
     auto& new_param = params_.emplace_back(std::unique_ptr<parameter>(
-        new template_param(p, std::move(name), std::move(desc))));
+        new template_param<T>(p, std::move(name), std::move(desc))));
     if (!prefix_.empty()) {
       new_param->name_ = prefix_ + "." + new_param->name_;
     }
@@ -76,13 +75,12 @@ protected:
 
 private:
   struct parameter {
-    parameter(std::string&& name, std::string&& desc)
-        : name_{std::move(name)}, desc_{std::move(desc)} {}
-    parameter(parameter const&) = default;
-    parameter(parameter&&) noexcept = default;
-    parameter& operator=(parameter const&) = default;
-    parameter& operator=(parameter&&) noexcept = default;
-    virtual ~parameter() = default;
+    parameter(std::string&& name, std::string&& desc);
+    parameter(parameter const&);
+    parameter(parameter&&) noexcept;
+    parameter& operator=(parameter const&);
+    parameter& operator=(parameter&&) noexcept;
+    virtual ~parameter();
 
     virtual void append_description(
         boost::program_options::options_description_easy_init&) = 0;
