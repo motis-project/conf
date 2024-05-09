@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cinttypes>
 #include <ctime>
 #include <istream>
 #include <ostream>
@@ -7,7 +8,7 @@
 namespace conf {
 
 struct time {
-  int64_t unix_time_{};
+  std::int64_t unix_time_{};
 };
 
 std::time_t parse_date_time(std::string const&);
