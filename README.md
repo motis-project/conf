@@ -1,4 +1,4 @@
-![Linux Build](https://github.com/motis-project/conf/workflows/Linux%20Build/badge.svg)
+![Unix Build](https://github.com/motis-project/conf/workflows/Unix%20Build/badge.svg)
 ![Windows Build](https://github.com/motis-project/conf/workflows/Windows%20Build/badge.svg)
 
 Enables to have programs with modular configuration structs.
